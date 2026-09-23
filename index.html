@@ -340,13 +340,16 @@
 </footer>
 
 <script>
+// Para arquivos grandes (vídeos, principalmente), em vez de hospedar no
+// repositório, cole aqui o link (ex: YouTube "não listado", Google Drive).
+// Deixe "" para continuar procurando o arquivo dentro da pasta files/.
 const files = [
-  {id:'pitch', name:'Vídeo pitch', hint:'MP4, MOV', accept:'video/*', icon:'play'},
-  {id:'mono', name:'Monografia', hint:'PDF, DOCX', accept:'.pdf,.doc,.docx', icon:'doc'},
-  {id:'documentacao', name:'Documentação da lousa', hint:'PDF, DOCX', accept:'.pdf,.doc,.docx', icon:'doc'},
-  {id:'videolousa', name:'Vídeo da lousa', hint:'MP4, MOV', accept:'video/*', icon:'play'},
-  {id:'slides', name:'Slide de apresentação', hint:'PPTX, PDF', accept:'.pdf,.ppt,.pptx', icon:'slide'},
-  {id:'banner', name:'Banner final', hint:'PNG, JPG, PDF', accept:'image/*,.pdf', icon:'image'},
+  {id:'pitch', name:'Vídeo pitch', hint:'MP4, MOV', accept:'video/*', icon:'play', external:''},
+  {id:'mono', name:'Monografia', hint:'PDF, DOCX', accept:'.pdf,.doc,.docx', icon:'doc', external:''},
+  {id:'documentacao', name:'Documentação da lousa', hint:'PDF, DOCX', accept:'.pdf,.doc,.docx', icon:'doc', external:''},
+  {id:'videolousa', name:'Vídeo da lousa', hint:'MP4, MOV', accept:'video/*', icon:'play', external:''},
+  {id:'slides', name:'Slide de apresentação', hint:'PPTX, PDF', accept:'.pdf,.ppt,.pptx', icon:'slide', external:''},
+  {id:'banner', name:'Banner final', hint:'PNG, JPG, PDF', accept:'image/*,.pdf', icon:'image', external:''},
 ];
 
 const icons = {
@@ -395,11 +398,11 @@ files.forEach(async f=>{
 
   const status = card.querySelector(`#status-${f.id}`);
   const actions = card.querySelector(`#actions-${f.id}`);
-  const url = await findFile(f);
+  const url = f.external ? f.external : await findFile(f);
 
   if(url){
     card.classList.add('has-file');
-    status.textContent = url.split('/').pop();
+    status.textContent = f.external ? 'Link externo' : url.split('/').pop();
     actions.innerHTML = `<a class="file-btn view" href="${url}" target="_blank" rel="noopener">Abrir / Baixar</a>`;
   } else {
     status.textContent = `Aguardando envio · files/${f.id}.${(extsByType[f.accept]||[])[0]}`;
